@@ -1,34 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shade Map</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
-    <style>
-      #map {
-        height: 500px;
-        width: 75%;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>MAP SHADE PROPOTYPING</h1>
-    <p class="map-info">
-      click to add
-    </p>
-    <div id="map"></div>
+<head>
+  <meta charset="utf-8" />
+  <title>Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; }
+    #controls { height: 40px; background: #f8f8f8; display: flex; align-items: center; padding: 0 1rem; font-family: sans-serif; }
+    #map { height: calc(100% - 40px); }
+    .leaflet-popup-content { font-family: sans-serif; font-size: 14px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <span id="status"></span>
+  </div>
+  <div id="map"></div>
 
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-    <script src="script.js"></script>
-  </body>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      //const map = L.map('map').setView([43.6386, -79.400942], 19);
+      const map = L.map('map').setView([43.6396, -79.3957], 19);
+      const statusEl = document.getElementById('status');
+      const OWM_KEY = '88105941896adefb80967ba3be6476a2';
+
+      // Force Esri satellite only
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution:'Tiles © Esri', maxZoom:19
+      }).addTo(map);
+
+      function jitterLatLng(lat, lng, radius) {
+        const angle = Math.random() * 2 * Math.PI;
+        const dist = Math.random() * radius;
+        const dx = dist * Math.cos(angle);
+        const dy = dist * Math.sin(angle);
+        const dLat = dy / 111320;
+        const dLng = dx / (111320 * Math.cos(lat * Math.PI / 180));
+        return [lat + dLat, lng + dLng];
+      }
+
+      function animateMarker(marker, from, to, duration, callback) {
+        let start = null;
+        function step(timestamp) {
+          if (!start) start = timestamp;
+          const progress = Math.min((timestamp - start) / duration, 1);
+          const lat = from.lat + (to.lat - from.lat) * progress;
+          const lng = from.lng + (to.lng - from.lng) * progress;
+          marker.setLatLng([lat, lng]);
+          if (progress < 1) requestAnimationFrame(step);
+          else {
+            marker.__animating = false;
+            if (callback) callback();
+          }
+        }
+        marker.__animating = true;
+        requestAnimationFrame(step);
+      }
+
+      function renderMarkers() {
+        //statusEl.textContent = 'Rendering…';
+        Papa.parse('gps_data.csv', {
+          download: true,
+          header: true,
+          dynamicTyping: true,
+          skipEmptyLines: true,
+          complete: results => {
+            const data = results.data
+              .filter(r => Number.isFinite(r.lat) && Number.isFinite(r.lng))
+              .sort((a,b) => a.lng - b.lng || b.lat - a.lat);
+
+            map.eachLayer(layer => {
+              if (layer instanceof L.Marker || layer instanceof L.Circle) {
+                map.removeLayer(layer);
+              }
+            });
+
+            data.forEach((pt, idx) => {
+              const size = 24; // fixed size ~30% of 80 max
+              const treeName = pt.Name || `Tree ${idx+1}`;
+              const baseLat = pt.lat, baseLng = pt.lng;
+              const accuracy = pt.accuracy || 1;
+
+              const bubble = L.circle([baseLat, baseLng], {
+                radius: accuracy,
+                color: '#3388ff',
+                weight: 1,
+                fillOpacity: 0.1
+              }).addTo(map);
+
+              const icon = L.icon({
+                iconUrl:'icons/tree.png',
+                shadowUrl:'icons/icon-shadow.png',
+                iconSize:[size, size],
+                shadowSize:[size, size*0.4],
+                iconAnchor:[size/2, size],
+                popupAnchor:[0, -size]
+              });
+
+              const marker = L.marker([baseLat, baseLng], { icon }).addTo(map);
+              marker.bindPopup(`<strong>${treeName}</strong><br><em>Loading weather…</em>`);
+
+              marker.on('popupopen', () => {
+                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${baseLat}&lon=${baseLng}&units=metric&appid=${OWM_KEY}`)
+                  .then(r => r.json()).then(json => {
+                    const desc = json.weather?.[0]?.description || 'N/A';
+                    const temp = json.main?.temp?.toFixed(1) ?? 'N/A';
+                    const hum  = json.main?.humidity ?? 'N/A';
+                    const updated = new Date(json.dt*1000).toLocaleString();
+                    marker.setPopupContent(`<strong>${treeName}</strong><br>${desc}, ${temp}°C<br>Humidity: ${hum}%<br><em>Updated: ${updated}</em>`);
+                  })
+                  .catch(() => marker.setPopupContent(`<strong>${treeName}</strong><br><em>Weather unavailable</em>`));
+              });
+
+              setInterval(() => {
+                if (marker.__animating) return;
+                const [jlat, jlng] = jitterLatLng(baseLat, baseLng, accuracy);
+                animateMarker(marker, marker.getLatLng(), { lat:jlat, lng:jlng }, 1000);
+              }, 6000 + Math.random()*6000);
+            });
+
+            if (data.length) {
+              const latlngs = data.map(pt => [pt.lat, pt.lng]);
+              //map.fitBounds(latlngs, { padding: [50, 50] });
+            }
+            //statusEl.textContent = `${data.length} points mapped`;
+          },
+          error: err => {
+            console.error(err);
+            statusEl.textContent = 'Failed to load CSV';
+          }
+        });
+      }
+
+      renderMarkers();
+    });
+  </script>
+</body>
 </html>
