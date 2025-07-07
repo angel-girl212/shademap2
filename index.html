@@ -37,7 +37,9 @@
 
         L.Control.geocoder({
           defaultMarkGeocode: false
-        }).addTo(map);
+        })
+        .on('markgeocode', e => map.setView(e.geocode.center, 16))
+        .addTo(map);
 
         function renderMarkers() {
           Papa.parse('https://raw.githubusercontent.com/angel-girl212/shademap2/refs/heads/main/shadecoords_responses.csv', {
