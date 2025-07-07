@@ -54,36 +54,26 @@ var polygon = L.polygon([
 
 polygon.bindPopup("<b>Under Gardiner Public Realm Plan</b><br>study area");
 
-function add(e) {
-  var coord = e.latlng.toString().split(',');
-  var lat = coord[0].split('(');
-  var lng = coord[1].split(')');
-  alert("You added a shady spot at" + lat[1] + " and " + lng[0]);
-  const marker = L.marker(e.latlng).addTo(map);
-  marker.bindPopup("<b>Your Shady Spot </b><br>" + e.latlng.toString()).openPopup();
- } 
+var popup = L.popup();
 
-function sendToForm(e) {
-  const lat = e.latlng.lat.toFixed(5);
-  const lng = e.latlng.lng.toFixed(5);
-  const timeStamp = new Date().toISOString();
-  const userId = "user-" + Math.floor(Math.random() * 100000);
-
-  const formUrl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfNV5ldiWUsR3nYRD35-_m2W4TSuUuijP3L55uOLdtPwqC2AQ/formResponse";
-  const formData = new URLSearchParams();
-  formData.append("entry.901935268", lat);     
-  formData.append("entry.1956546171", lng);     
-  formData.append("entry.56758637", timeStamp);  // timestamp optional field
-  formData.append("entry.1570862743", userId); // userId
-
-  fetch(formUrl, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
-  }).catch(err => console.error("Error:", err));
+function onMapClick(e) {
+  popup
+    .setLatLng(e.latlng)
+    .setContent("You clicked the map at " + e.latlng.toString())
+    .openOn(map);
 }
 
-map.addEventListener('click', (e) => {
-  add(e);
-  sendToForm(e);
+map.on('click', onMapClick);
+
+function ask() {
+  var answer = window.confirm("Would you like to input this location as a shady spot?");
+    if (answer) {
+      // send to webapp
+    } else {
+      // close window
+    }
+}
+
+map.addEventListener("dblclick", () => {
+  ask();
 });
