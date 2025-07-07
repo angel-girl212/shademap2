@@ -6,8 +6,8 @@
     <title>Shade Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-      /* html, body {height: 100%; margin: 0; padding: 0; }*/
-      /* controls { height: 40px, background: #f8f8f8; display: flex; align-items: center; padding: 0 1rem; font-family: sans-serif; }*/
+      /* html, body { height: 100%; margin: 0; padding: 0; } */
+      /* controls { height: 40px; background: #f8f8f8; display: flex; align-items: center; padding: 0 1rem; font-family: sans-serif; } */
       #map { height: 500px; width: 75%; }
       .leaflet-popup-content { font-family: sans-serif; font-size: 14px; line-height: 1.4; }
     </style>
@@ -21,18 +21,44 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script>
-      document.addEventListener('DOM content loaded', () => {
+      document.addEventListener('DOMContentLoaded', () => {
         const map = L.map('map').setView([43.637869, -79.406311], 13);
-        // const statusEl = document.getElementById('status');
-        // const OWM_KEY = see view-source:https://photo.grahampowell.com/map/V2CL/map.html
+        const statusEl = document.getElementById('status');
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }).addTo(map);
 
         function renderMarkers() {
-          Papa.parse('shadecoords_responses.csv', {
+          Papa.parse('https://raw.githubusercontent.com/angel-girl212/shademap2/refs/heads/main/shadecoords_responses.csv', {
             download: true,
             header: true,
             dynamicTyping: true,
             skipEmptyLines: true,
-            complete: results
+            complete: results => {
+              const data = results.data
+                .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
+                .sort((a, b) => a.longitude - b.longitude || b.latitude - a.latitude);
+
+              data.forEach((pt, idx) => {
+                const baseLat = pt.latitude;
+                const baseLng = pt.longitude;
+
+                const marker = L.marker([baseLat, baseLng]).addTo(map);
+                marker.bindPopup("<b>A shady spot</b><br>User ID");
+              });
+            },
+            error: err => {
+              console.error(err);
+              statusEl.textContent = 'Failed to load CSV';
+            }
+          });
+        }
+
+        renderMarkers();
+      });
     </script>
   </body>
 </html>
