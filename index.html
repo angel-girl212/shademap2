@@ -58,7 +58,7 @@
                 const markerName = pt.name; // will be undefined if undefined
 
                 const marker = L.marker([baseLat, baseLng]).addTo(map);
-                marker.bindPopup(`<b>${markerName}</b><br>${baseLat.toFixed(6)}, ${baseLng.toFixed(5)}`).openPopup();
+                marker.bindPopup(`<b>${markerName}</b><br>${baseLat.toFixed(6)}, ${baseLng.toFixed(5)}`);
               });
             },
             error: err => {
