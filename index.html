@@ -35,6 +35,10 @@
       <div id="controls">
         <span id="status"></span>
       </div>
+      <div id="layer-buttons">
+        <button onclick="setBaseLayer('street')">Street View</button>
+        <button onclick="setBaseLayer('satellite')">Satellite</button>
+      </div>
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -101,7 +105,7 @@
             error: err => {
               console.error(err);
               if (typeof statusEl !== 'undefined') {
-                statusEl.textContent = 'Failed to load CSV';
+                statusEl.textContent = 'Failed to load markers';
               }
             }
           });
