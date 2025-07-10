@@ -74,14 +74,17 @@
     function setBaseLayer(name) {
       map.removeLayer(street);
       map.removeLayer(satellite);
+      map.removeLayer(ndvi);
       if (name === 'street') {
         street.addTo(map);
         currentBase = 'street';
-      if (name ===
-      } else {
+      else if (name === 'satellite') {
         satellite.addTo(map);
         currentBase = 'satellite';
-      }
+      else (name === 'ndvi') {
+        ndvi.addTo(map);
+        currentBase = 'ndvi';
+      } 
     }
 
     L.Control.geocoder({
