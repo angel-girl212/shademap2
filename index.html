@@ -72,9 +72,10 @@
     let currentBase = 'street';
 
     function setBaseLayer(name) {
+      if (map.hasLayer(ndvi)) map.removeLayer(ndvi);
+      
       map.removeLayer(street);
       map.removeLayer(satellite);
-      if (map.hasLayer(ndvi)) map.removeLayer(ndvi);
       
       if (name === 'street') {
         street.addTo(map);
@@ -82,12 +83,12 @@
       } else if (name === 'satellite') {
         satellite.addTo(map);
         currentBase = 'satellite';
-      } else (name === 'ndvi') {
+      } else if (name === 'ndvi') {
         if (!map.hasLayer(ndvi)) {
         ndvi.addTo(map);
-      } 
-    }
-  }    
+        } 
+      }
+    }    
 
     L.Control.geocoder({
       defaultMarkGeocode: false,
