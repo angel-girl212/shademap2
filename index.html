@@ -56,7 +56,17 @@
       { attribution: '© Esri' }
     );
 
-   // const ndvi = 
+   const ndvi = new L.LeafletGeotiff('imagery/toronto_ndvi_color_export_nd.tif', {
+     band: 0,
+     displayMin: 0,
+     displayMax: 255,
+     name: "Toronto Summer 2024 NDVI",
+     renderer: new L.LeafletGeotiff.Plotty({
+       displayMin: 0,
+       displayMax: 255,
+       colorScale: 'viridis'
+     })
+   });    
 
     let currentBase = 'street';
 
@@ -66,21 +76,12 @@
       if (name === 'street') {
         street.addTo(map);
         currentBase = 'street';
+      if (name ===
       } else {
         satellite.addTo(map);
         currentBase = 'satellite';
       }
     }
-
-//    function toggleHeat() {
-//      if (heatVisible) {
-//        map.removeLayer(heatLayer);
- //       heatVisible = false;
- //     } else {
- //       heatLayer.addTo(map);
-//        heatVisible = true;
-//      }
-//    }
 
     L.Control.geocoder({
       defaultMarkGeocode: false,
