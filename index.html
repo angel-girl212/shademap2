@@ -29,7 +29,6 @@
     .leaflet-top.leaflet-right .leaflet-control-geocoder {
       margin-top: 60px; /* Pushes it downward */
     }
-    
   </style>
 </head>
 <body>
@@ -38,7 +37,6 @@
     <button onclick="setBaseLayer('street')">Street View</button>
     <button onclick="setBaseLayer('satellite')">Satellite View</button>
     <button onclick="setBaseLayer('ndvi')">Urban Heat Island View</button>
- <!--   <button onclick="toggleHeat()"> Heat Map</button> -->
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -57,50 +55,54 @@
       { attribution: '© Esri' }
     );
 
-   const ndvi = new L.LeafletGeotiff('imagery/toronto_ndvi_color_export_nd.tif', {
-     band: 0,
-     displayMin: 0,
-     displayMax: 255,
-     name: "Toronto Summer 2024 NDVI",
-     renderer: new L.LeafletGeotiff.Plotty({
-       displayMin: 0,
-       displayMax: 255,
-       colorScale: 'viridis'
-     })
-   });    
+    const ndvi = new L.LeafletGeotiff('imagery/toronto_ndvi_color_export_nd.tif', {
+      band: 0,
+      displayMin: 0,
+      displayMax: 255,
+      name: "Toronto Summer 2024 NDVI",
+      renderer: new L.LeafletGeotiff.Plotty({
+        displayMin: 0,
+        displayMax: 255,
+        colorScale: 'viridis'
+      })
+    });
 
     let currentBase = 'street';
 
     function setBaseLayer(name) {
+      // If toggling NDVI overlay
       if (name === 'ndvi') {
         if (map.hasLayer(ndvi)) {
           map.removeLayer(ndvi);
         } else {
           ndvi.addTo(map);
         }
-        return;
+        return; // Don't change base layer if toggling NDVI
       }
-      //WWTFFF
+
+      // Remove NDVI overlay and base layers before switching base layer
       if (map.hasLayer(ndvi)) map.removeLayer(ndvi);
       map.removeLayer(street);
       map.removeLayer(satellite);
-      
+
       if (name === 'street') {
         street.addTo(map);
+        currentBase = 'street';
       } else if (name === 'satellite') {
         satellite.addTo(map);
-        satellite.addTo(map);
-      } 
-    }    
+        currentBase = 'satellite';
+      }
+    }
 
+    // Add geocoder control
     L.Control.geocoder({
       defaultMarkGeocode: false,
       position: 'topright' // or 'bottomleft', etc.
     })
       .on('markgeocode', e => map.setView(e.geocode.center, 16))
       .addTo(map);
-      
 
+    // Load markers from CSV via PapaParse
     Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTKkr3mFgXmY94rxu-H2qPjj3aEC4-pkeJAcafvc7_3iiueQjpfwvgtXmJxqVUvHG5T72pLKwBZufO_/pub?output=csv', {
       download: true,
       header: true,
