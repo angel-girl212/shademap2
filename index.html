@@ -22,13 +22,14 @@
       border-radius: 4px; background: #eee;
       cursor: pointer;
     }
+    
     #layer-buttons button:hover { background: #ccc; }
     .leaflet-popup-content { font: 14px sans-serif; }
 
-    .leaflet-control-geocoder {
-      margin-top: 500px; 
-      margin-right: 300px;
+    .leaflet-top.leaflet-right .leaflet-control-geocoder {
+      margin-top: 60px; /* Pushes it downward */
     }
+    
   </style>
 </head>
 <body>
@@ -87,11 +88,12 @@
 //      }
 //    }
 
-    L.Control.geocoder({ defaultMarkGeocode: false })
+    L.Control.geocoder({
+      defaultMarkGeocode: false,
+      position: 'topright' // or 'bottomleft', etc.
+    })
       .on('markgeocode', e => map.setView(e.geocode.center, 16))
-      position: 'topright' // or 'topleft', 'topright', 'bottomright'
       .addTo(map);
-    });
       
 
     Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTKkr3mFgXmY94rxu-H2qPjj3aEC4-pkeJAcafvc7_3iiueQjpfwvgtXmJxqVUvHG5T72pLKwBZufO_/pub?output=csv', {
