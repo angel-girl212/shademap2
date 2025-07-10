@@ -72,22 +72,25 @@
     let currentBase = 'street';
 
     function setBaseLayer(name) {
-      if (map.hasLayer(ndvi)) map.removeLayer(ndvi);
+      if (name === 'ndvi') {
+        if (map.hasLayer(ndvi)) {
+          map.removeLayer(ndvi));
+        } else {
+          ndvi.addTo(map):
+        }
+        return;
+      }
       
+      if (map.hasLayer(ndvi)) map.removeLayer(ndvi);
       map.removeLayer(street);
       map.removeLayer(satellite);
       
       if (name === 'street') {
         street.addTo(map);
-        currentBase = 'street';
       } else if (name === 'satellite') {
         satellite.addTo(map);
-        currentBase = 'satellite';
-      } else if (name === 'ndvi') {
-        if (!map.hasLayer(ndvi)) {
-        ndvi.addTo(map);
-        } 
-      }
+        satellite.addTo(map);
+      } 
     }    
 
     L.Control.geocoder({
