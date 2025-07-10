@@ -43,6 +43,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="https://unpkg.com/leaflet-geotiff/leaflet-geotiff.min.js"></script>
   <script>
     const map = L.map('map').setView([43.637869, -79.406311], 13);
 
@@ -55,16 +56,9 @@
       { attribution: '© Esri' }
     );
 
-//    const heatLayer = L.tileLayer(
-//      'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=b093a4af9795adc8f1ae5f20076873b3',
-//      {
-//        attribution: '© OpenWeatherMap',
-//        opacity: 0.95
-//      }
-//    );
+   // const ndvi = 
 
     let currentBase = 'street';
-    let heatVisible = false;
 
     function setBaseLayer(name) {
       map.removeLayer(street);
