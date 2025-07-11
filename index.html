@@ -12,8 +12,8 @@
     #layer-buttons button:hover { background: #ccc; }
     .leaflet-popup-content { font: 14px sans-serif; }
 
-    .leaflet-top.leaflet-right .leaflet-control-geocoder {
-      margin-top: 60px; /* Pushes it downward */
+    .leaflet-top.leaflet-left .leaflet-control-geocoder {
+      margin-top: 30px; /* Pushes it downward */
     }
   </style>
 
@@ -52,7 +52,7 @@
     // Geocoder setup
     L.Control.geocoder({
       defaultMarkGeocode: false,
-      position: 'topright'
+      position: 'topleft'
     })
       .on('markgeocode', e => map.setView(e.geocode.center, 16))
       .addTo(map);
