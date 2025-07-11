@@ -55,9 +55,8 @@
       { attribution: '© Esri' }
     );
 
-    // Add default base layer
-    street.addTo(map);
-    let currentBase = 'street';
+    let currentBase = 'satellite';
+    satellite.addTo(map);
 
     function setBaseLayer(name) {
       map.removeLayer(street);
