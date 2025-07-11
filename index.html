@@ -112,7 +112,7 @@
             marker.on('dblclick', () => {
               const popupContent = `
                 <div style="width: 300px;">
-                  <h4${r.name || 'Unnamed'}</h4>
+                  <h4>${r.name || 'Unnamed'}</h4>
                   <p>${r.description || ''}</p>
                   <iframe src="${r.link}" width="100%" height="200" frameborder="0"></iframe>
                 </div> 
@@ -133,7 +133,7 @@
               marker.addTo(map); // fallback if timeday is missing or invalid
             }
           });
-
+  
         const overlays = {
           'Morning': morning,
           'Afternoon': afternoon,
