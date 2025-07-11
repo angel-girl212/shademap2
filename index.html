@@ -66,6 +66,24 @@
       .on('markgeocode', e => map.setView(e.geocode.center, 16))
       .addTo(map);
 
+    fetch('toronto_bound.json')
+      .then(response => {
+        if (!response.ok) throw new Error('Network response error');
+        return response.json();
+      })
+      .then(data => {
+        boundaryLayer = L.geoJSON(data, {
+          style: {
+            color: "#000000",
+            weight: 2,
+            fillOpacity: 0.1
+          }
+        }).addTo(map);
+      })
+      .catch(error => {
+        console.error("Failed to load JSON:", error);
+      });
+
     // Load markers from Google Sheet CSV
     Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTKkr3mFgXmY94rxu-H2qPjj3aEC4-pkeJAcafvc7_3iiueQjpfwvgtXmJxqVUvHG5T72pLKwBZufO_/pub?output=csv', {
       download: true,
