@@ -92,7 +92,6 @@
 
     const layerControl = L.control.layers(baseMaps).addTo(map);
     
-    // Load markers from Google Sheet CSV
     Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9kaeUmBnutaETaCQgasAR-S6udJ-zlt2KazlgM5lL-kt5g4vE8X9_Jl3yb5hk/pub?output=csv', {
       download: true,
       header: true,
@@ -100,25 +99,52 @@
       skipEmptyLines: true,
 
       complete: results => {
+        const morning = L.layerGroup();
+        const afternoon = L.layerGroup();
+        const evening = L.layerGroup();
+        const night = L.layerGroup();
+
         results.data
           .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
           .forEach(r => {
-            const marker = L.marker([r.latitude, r.longitude], {icon: goldIcon}).addTo(map);
+            const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
             marker.bindPopup(`<b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`);
+
+            const time = (r.timeday || '').toLowerCase().trim();
+            if (time === 'morning') {
+              marker.addTo(morning);
+            } else if (time === 'afternoon') {
+              marker.addTo(afternoon);
+            } else if (time === 'evening') {
+              marker.addTo(evening);
+            } else if (time === 'night') {
+              marker.addTo(night);
+            } else {
+              marker.addTo(map); // fallback if timeday is missing or invalid
+            }
           });
+
+        // Add groups to map (optional)
+        morning.addTo(map);
+        afternoon.addTo(map);
+        evening.addTo(map);
+        night.addTo(map);
+
+        // Add to layer control
+        const overlays = {
+          'Morning': morning,
+          'Afternoon': afternoon,
+          'Evening': evening,
+          'Night': night
+        };
+        L.control.layers(null, overlays, { collapsed: false }).addTo(map);
       },
+
       error: err => {
         console.error(err);
         alert('Failed to load markers.');
       }
     });
-
-    //const overlays = {
-      //'Morning': morning,
-      //'Afternoon': afternoon,
-      //'Evening': evening,
-      //'Night': night
-    //}
   </script>
 </body>
 </html>
