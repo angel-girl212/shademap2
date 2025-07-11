@@ -108,7 +108,7 @@
             const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
             
             marker.bindPopup(`<b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`);
-            
+
             marker.on('dblclick', () => {
               const popupContent = `
                 <div style="width: 300px;">
@@ -118,7 +118,8 @@
                   <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
                 </div> 
               `;
-              marker.bindPopup(popupContent).openPopup();
+              
+              marker.setPopupContent(popupContent).openPopup();
             });
 
             const time = (r.timeday || '').toLowerCase().trim();
