@@ -114,6 +114,8 @@
                 <div style="width: 300px;">
                   <h4>${r.name || 'Unnamed'}</h4>
                   <p>${r.description || ''}</p>
+                  <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
+                  <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
                 </div> 
               `;
               marker.bindPopup(popupContent).openPopup();
