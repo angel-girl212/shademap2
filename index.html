@@ -135,6 +135,8 @@
           'Evening': evening,
           'Night': night
         };
+
+        const layerControl = L.control.layers(baseMaps, overlays).addTo(map);
       },
 
       error: err => {
@@ -142,8 +144,6 @@
         alert('Failed to load markers.');
       }
     });
-    
-    const layerControl = L.control.layers(baseMaps, overlays).addTo(map);
   </script>
 </body>
 </html>
