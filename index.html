@@ -39,12 +39,12 @@
     const map = L.map('map', {
       center: [43.637869, -79.406311], 
       zoom: 13,
-      layers: [satellite, street]
+      layers: [street, satellite]
     });
     
     const baseMaps = {
-      "Satellite View": satellite,
-      "Street View": street
+      "Street View": street,
+      "Satellite View": satellite
     };
 
     const layerControl = L.control.layers(baseMaps).addTo(map);
