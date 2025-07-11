@@ -20,42 +20,34 @@
 </head>
 <body>
   <div id="map"></div>
-  <div id="layer-buttons">
-    <button onclick="setBaseLayer('street')">Street View</button>
-    <button onclick="setBaseLayer('satellite')">Satellite View</button>
-  </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
   <script>
-    const map = L.map('map').setView([43.637869, -79.406311], 13);
+    
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
+      attribution: '© Esri' 
+    });
 
     const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     });
     
-    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
-      attribution: '© Esri' 
+    const map = L.map('map', {
+      center: [43.637869, -79.406311], 
+      zoom: 13,
+      layers: [satellite, street]
     });
+    
+    const baseMaps = {
+      "Satellite View": satellite,
+      "Street View": street
+    };
 
-    let currentBase = 'satellite';
-    satellite.addTo(map);
-
-    function setBaseLayer(name) {
-      map.removeLayer(street);
-      map.removeLayer(satellite);
-
-      if (name === 'street') {
-        street.addTo(map);
-        currentBase = 'street';
-      } else if (name === 'satellite') {
-        satellite.addTo(map);
-        currentBase = 'satellite';
-      }
-    }
+    const layerControl = L.control.layers(baseMaps).addTo(map);
 
     // Geocoder setup
     L.Control.geocoder({
