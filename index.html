@@ -65,6 +65,9 @@
       .on('markgeocode', e => map.setView(e.geocode.center, 16))
       .addTo(map);
 
+    map.createPane('topPane');
+    map.getPane('topPane').style.zIndex = 650;
+
     fetch('toronto_bound.json')
       .then(response => {
         if (!response.ok) throw new Error('Network response error');
@@ -72,11 +75,15 @@
       })
       .then(data => {
         boundaryLayer = L.geoJSON(data, {
+          pane: 'topPane',
           style: {
-            color: "#000000",
-            weight: 2,
-            fillOpacity: 0.1
-          }
+            color: "#ffd300",
+            weight: 4,
+            fillOpacity: 0
+          },
+          onEachFeature: function (feature, layer) {
+            layer.findPopup("Toronto Regional Boundary");
+          }  
         }).addTo(map);
       })
       .catch(error => {
