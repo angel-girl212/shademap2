@@ -114,7 +114,6 @@
                 <div style="width: 300px;">
                   <h4>${r.name || 'Unnamed'}</h4>
                   <p>${r.description || ''}</p>
-                  <iframe src="${r.link}" width="100%" height="200" frameborder="0"></iframe>
                 </div> 
               `;
               marker.bindPopup(popupContent).openPopup();
@@ -133,7 +132,12 @@
               marker.addTo(map); // fallback if timeday is missing or invalid
             }
           });
-  
+        
+        morning.addTo(map);
+        afternoon.addTo(map);
+        evening.addTo(map);
+        night.addTo(map);
+
         const overlays = {
           'Morning': morning,
           'Afternoon': afternoon,
