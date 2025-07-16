@@ -21,14 +21,7 @@
 
     .leaflet-top.leaflet-left .leaflet-control-geocoder {
       margin-top: 10px; /* Pushes it downward */
-    }
-    
-    .leaflet-control-layers-tree {
-      font-size: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    
+    }    
   </style>
 
 </head>
@@ -138,6 +131,13 @@
 
         const overlayTree = [
           {
+            label: 'Heat Maps', 
+            collapsed: true,
+            children: [
+              {label: 'Urban Heat Island', layer: ndviOverlay}
+            ]
+          },
+          {
             label: 'Cool Spots',
             collapsed: true,
             children: [
@@ -146,8 +146,7 @@
               {label: 'Evening', layer: evening},
               {label: 'Night', layer: night}
             ]
-          },
-          {label: 'Urban Heat Island', layer: ndviOverlay}
+          }
         ];
 
         L.control.layers.tree(baseTree, overlayTree).addTo(map);
