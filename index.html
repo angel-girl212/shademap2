@@ -89,55 +89,60 @@
           { opacity: 0.65 }
         );
 
-        // Place markers into time-of-day groups
-        results.data
-          .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
-          .forEach(r => {
-            const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
-            const defaultPopup = `<b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`;
-            const detailedPopup = `<div style="width:300px;"><b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}<p>${r.description||''}</p><p>Best time: ${r.timeday||'unknown'}.</p></div>`;
-            marker.bindPopup(defaultPopup);
-            marker.on('dblclick', () => marker.getPopup().setContent(detailedPopup).openOn(map));
-            marker.on('popupclose', () => marker.getPopup().setContent(defaultPopup));
+    // Place markers into time-of-day groups
+    results.data
+      .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
+      .forEach(r => {
+        const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
+        const defaultPopup = `<b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`;
+        const detailedPopup = `<div style="width:300px;"><b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}<p>${r.description||''}</p><p>Best time: ${r.timeday||'unknown'}.</p></div>`;
+        marker.bindPopup(defaultPopup);
+        marker.on('dblclick', () => marker.getPopup().setContent(detailedPopup).openOn(map));
+        marker.on('popupclose', () => marker.getPopup().setContent(defaultPopup));
 
-            const time = (r.timeday||'').toLowerCase().trim();
-            if (time === 'morning') marker.addTo(morning);
-            else if (time === 'afternoon') marker.addTo(afternoon);
-            else if (time === 'evening') marker.addTo(evening);
-            else if (time === 'night') marker.addTo(night);
-            else marker.addTo(morning);
-          });
-
-        // Add marker groups to map
-        morning.addTo(map);
-        afternoon.addTo(map);
-        evening.addTo(map);
-        night.addTo(map);
-
-        const baseTree = [
-          {
-            label: 'Map Views',
-            children: [
-              {label: 'Street View', layer: street, name: 'OSM'},
-              {label: 'Satellite View', layer: satellite, name: 'ESRI'},
-              {label: 'Urban Heat Island', layer: ndviOverlay, name: 'LandSat'}  
-            ]
-          },
-          {
-            label: 'Cool Spot Markers',
-            children: [
-              {label: 'Morning', layer: morning},
-              {label: 'Afternoon', layer: afternoon},
-              {label: 'Evening', layer: evening},
-              {label: 'Night', layer: night}
-            ]
-          },
-        ];
-
-      L.control.layers(baseTree).addTo(map); // GP OVERLAY CODE
-      
+        const time = (r.timeday||'').toLowerCase().trim();
+        if (time === 'morning') marker.addTo(morning);
+        else if (time === 'afternoon') marker.addTo(afternoon);
+        else if (time === 'evening') marker.addTo(evening);
+        else if (time === 'night') marker.addTo(night);
+        else marker.addTo(morning);
+      }, 
       error: err => { console.error(err); alert('Failed to load markers.'); }
     });
+
+        // Add marker groups to map
+    morning.addTo(map);
+    afternoon.addTo(map);
+    evening.addTo(map);
+    night.addTo(map);
+
+    const baseTree = {
+      label: 'Base Maps',
+        children: [
+          {label: 'Street View', layer: street, name: 'OSM'},
+          {label: 'Satellite View', layer: satellite, name: 'ESRI'},  
+        ]
+    };
+
+    const overlayTree = [
+      {
+        label: 'Urban Heat Island',
+        children: [
+          {label: 'NDVI', layer: ndviOverlay}
+        ]
+      },
+      {
+        label: 'Cool Spot Markers',
+        children: [
+          {label: 'Morning', layer: morning}
+          {label: 'Afternoon', layer: afternoon},
+          {label: 'Evening', layer: evening},
+          {label: 'Night', layer: night}
+        ]
+      }
+    ];
+
+    L.control.layers(baseTree).addTo(map);
   </script>
 </body>
 </html>
