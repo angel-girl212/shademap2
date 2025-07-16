@@ -121,6 +121,7 @@
 
         const baseTree = {
           label: 'Base Maps',
+          collapsed: true,
             children: [
               {label: 'Street View', layer: street, name: 'OSM'},
               {label: 'Satellite View', layer: satellite, name: 'ESRI'}  
@@ -128,14 +129,13 @@
         };
 
         const overlayTree = [
-          {
-            label: '',
-            children: [
-              {label: 'Urban Heat Island', layer: ndviOverlay}
-            ]
-          },
+          {label: 'Urban Heat Island', layer: ndviOverlay};
+            // children: [
+            //  {label: 'Urban Heat Island', 
+            //]
           {
             label: 'Cool Spots',
+            collapsed: true,
             children: [
               {label: 'Morning', layer: morning},
               {label: 'Afternoon', layer: afternoon},
