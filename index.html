@@ -106,43 +106,44 @@
             else if (time === 'evening') marker.addTo(evening);
             else if (time === 'night') marker.addTo(night);
             else marker.addTo(morning);
-          }, 
-          error: err => { console.error(err); alert('Failed to load markers.'); }
-        });
+          });
 
         // Add marker groups to map
-    morning.addTo(map);
-    afternoon.addTo(map);
-    evening.addTo(map);
-    night.addTo(map);
+        morning.addTo(map);
+        afternoon.addTo(map);
+        evening.addTo(map);
+        night.addTo(map);
 
-    const baseTree = {
-      label: 'Base Maps',
-        children: [
-          {label: 'Street View', layer: street, name: 'OSM'},
-          {label: 'Satellite View', layer: satellite, name: 'ESRI'}  
-        ]
-    };
+        const baseTree = {
+          label: 'Base Maps',
+            children: [
+              {label: 'Street View', layer: street, name: 'OSM'},
+              {label: 'Satellite View', layer: satellite, name: 'ESRI'}  
+            ]
+        };
 
-    const overlayTree = [
-      {
-        label: 'Urban Heat Island',
-        children: [
-          {label: 'NDVI', layer: ndviOverlay}
-        ]
+        const overlayTree = [
+          {
+            label: 'Urban Heat Island',
+            children: [
+              {label: 'NDVI', layer: ndviOverlay}
+            ]
+          },
+          {
+            label: 'Cool Spot Markers',
+            children: [
+              {label: 'Morning', layer: morning},
+              {label: 'Afternoon', layer: afternoon},
+              {label: 'Evening', layer: evening},
+              {label: 'Night', layer: night}
+            ]
+          }
+        ];
+
+        L.control.layers.tree(baseTree, overlayTree).addTo(map);
       },
-      {
-        label: 'Cool Spot Markers',
-        children: [
-          {label: 'Morning', layer: morning},
-          {label: 'Afternoon', layer: afternoon},
-          {label: 'Evening', layer: evening},
-          {label: 'Night', layer: night}
-        ]
-      }
-    ];
-
-    L.control.layers(baseTree, overlayTree).addTo(map);
+      error: err => { console.error(err); alert('Failed to load markers.'); }
+    });
   </script>
 </body>
 </html>
