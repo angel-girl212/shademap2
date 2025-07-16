@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.control.layers.tree@1.1.1/L.Control.Layers.Tree.min.css"
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="GP.css" />
   <style>
@@ -24,7 +25,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.control.layers.tree@1.1.1/L.Control.Layers.Tree.min.js"></script>
   <script>
     // Base tile layers
     const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -41,11 +42,6 @@
       zoom: 13,
       layers: [street, satellite] // default layers
     });
-
-    const baseMaps = {
-      'Street View': street,
-      'Satellite View': satellite
-    };
 
     // Boundary pane
     map.createPane('topPane');
@@ -91,11 +87,7 @@
           'toronto_ndvi_color_export_nd.png',
           [[43.581, -79.639], [43.855, -79.116]],
           { opacity: 0.65 }
-        ); // GP OVERLAY CODE
-
-        // GP OVERLAY CODE: overlay group objects
-        const ndvi_overlay = { 'Urban Heat Island<br>Simulation': ndviOverlay }; // GP OVERLAY CODE
-        const marker_overlays = { 'Morning': morning, 'Afternoon': afternoon, 'Evening': evening, 'Night': night }; // GP OVERLAY CODE
+        );
 
         // Place markers into time-of-day groups
         results.data
@@ -122,8 +114,28 @@
         evening.addTo(map);
         night.addTo(map);
 
-        L.control.layers(baseMaps, ndvi_overlay, marker_overlays).addTo(map); // GP OVERLAY CODE
-      },
+        const baseTree = [
+          {
+            label: 'Map Views',
+            children: [
+              {label: 'Street View', layer: street, name: 'OSM'},
+              {label: 'Satellite View', layer: satellite, name: 'ESRI'},
+              {label: 'Urban Heat Island', layer: ndviOverlay, name: 'LandSat'}  
+            ]
+          },
+          {
+            label: 'Cool Spot Markers',
+            children: [
+              {label: 'Morning', layer: morning},
+              {label: 'Afternoon', layer: afternoon},
+              {label: 'Evening', layer: evening},
+              {label: 'Night', layer: night}
+            ]
+          },
+        ];
+
+      L.control.layers(baseTree).addTo(map); // GP OVERLAY CODE
+      
       error: err => { console.error(err); alert('Failed to load markers.'); }
     });
   </script>
