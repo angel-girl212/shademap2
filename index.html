@@ -26,140 +26,105 @@
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
   <script>
-    
-    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
-      maxZoom: 19,
-      attribution: '© Esri' 
-    });
-
+    // Base tile layers
     const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
-    
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: '© Esri'
+    });
+
     const map = L.map('map', {
-      center: [43.637869, -79.406311], 
+      center: [43.637869, -79.406311],
       zoom: 13,
-      layers: [street, satellite]
+      layers: [street, satellite] // default layers
     });
-    
+
     const baseMaps = {
       'Street View': street,
       'Satellite View': satellite
     };
 
+    // Boundary pane
     map.createPane('topPane');
     map.getPane('topPane').style.zIndex = 650;
 
+    // Load GTA boundary
     fetch('toronto_bound.json')
-      .then(response => {
-        if (!response.ok) throw new Error('Network response error');
-        return response.json();
-      })
+      .then(res => res.json())
       .then(data => {
-        boundaryLayer = L.geoJSON(data, {
+        L.geoJSON(data, {
           pane: 'topPane',
-          style: {
-            color: "#ffd300",
-            weight: 4,
-            fillOpacity: 0,
-            dashArray: '6, 6'
-          },
-          onEachFeature: function (feature, layer) {
-            layer.bindPopup("Toronto Regional Boundary");
-          }  
-        }).addTo(map);
+          style: { color: '#ffd300', weight: 4, fillOpacity: 0, dashArray: '6,6' }
+        }).bindPopup('Toronto Regional Boundary').addTo(map);
       })
-      .catch(error => {
-        console.error("Failed to load JSON:", error);
-      });
-    
-    L.Control.geocoder({
-      defaultMarkGeocode: false,
-      position: 'topleft'
-    })
+      .catch(err => console.error('Failed to load boundary:', err));
+
+    // Geocoder control
+    L.Control.geocoder({ defaultMarkGeocode: false, position: 'topleft' })
       .on('markgeocode', e => map.setView(e.geocode.center, 16))
       .addTo(map);
-    
+
+    // Custom marker icon
     const goldIcon = new L.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
+      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
     });
-    
+
+    // Load and parse marker CSV
     Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9kaeUmBnutaETaCQgasAR-S6udJ-zlt2KazlgM5lL-kt5g4vE8X9_Jl3yb5hk/pub?output=csv', {
       download: true,
       header: true,
       dynamicTyping: true,
       skipEmptyLines: true,
-
       complete: results => {
         const morning = L.layerGroup();
         const afternoon = L.layerGroup();
         const evening = L.layerGroup();
         const night = L.layerGroup();
 
+        // GP OVERLAY CODE: define Urban Heat Island Simulation overlay
+        const ndviOverlay = L.imageOverlay(
+          'toronto_ndvi_color_export_nd.png',
+          [[43.581, -79.639], [43.855, -79.116]],
+          { opacity: 0.65 }
+        ); // GP OVERLAY CODE
+
+        // GP OVERLAY CODE: overlay group objects
+        const ndvi_overlay = { 'Urban Heat Island<br>Simulation': ndviOverlay }; // GP OVERLAY CODE
+        const marker_overlays = { 'Morning': morning, 'Afternoon': afternoon, 'Evening': evening, 'Night': night }; // GP OVERLAY CODE
+
+        // Place markers into time-of-day groups
         results.data
           .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
           .forEach(r => {
             const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
-
-            const defaultPopup = `<b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`;
-            const detailedPopup = `
-              <div style="width: 300px;">
-                    <b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}
-                    <p>${r.description || ''}</p>
-                    <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
-                    <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
-                  </div> 
-                `;
-            
+            const defaultPopup = `<b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`;
+            const detailedPopup = `<div style="width:300px;"><b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}<p>${r.description||''}</p><p>Best time: ${r.timeday||'unknown'}.</p></div>`;
             marker.bindPopup(defaultPopup);
+            marker.on('dblclick', () => marker.getPopup().setContent(detailedPopup).openOn(map));
+            marker.on('popupclose', () => marker.getPopup().setContent(defaultPopup));
 
-            marker.on('dblclick', () => {
-              marker.getPopup().setContent(detailedPopup).openOn(map);
-            });
-
-            marker.on('popupclose', () => {
-              marker.getPopup().setContent(defaultPopup);
-            });
-
-            const time = (r.timeday || '').toLowerCase().trim();
-            if (time === 'morning') {
-              marker.addTo(morning);
-            } else if (time === 'afternoon') {
-              marker.addTo(afternoon);
-            } else if (time === 'evening') {
-              marker.addTo(evening);
-            } else if (time === 'night') {
-              marker.addTo(night);
-            } else {
-              marker.addTo(map); // fallback if timeday is missing or invalid
-            }
+            const time = (r.timeday||'').toLowerCase().trim();
+            if (time === 'morning') marker.addTo(morning);
+            else if (time === 'afternoon') marker.addTo(afternoon);
+            else if (time === 'evening') marker.addTo(evening);
+            else if (time === 'night') marker.addTo(night);
+            else marker.addTo(morning);
           });
-        
+
+        // Add marker groups to map
         morning.addTo(map);
         afternoon.addTo(map);
         evening.addTo(map);
         night.addTo(map);
 
-        const overlays = {
-          'Morning': morning,
-          'Afternoon': afternoon,
-          'Evening': evening,
-          'Night': night
-        };
-
-        const layerControl = L.control.layers(baseMaps, overlays).addTo(map);
+        L.control.layers(baseMaps, ndvi_overlay, marker_overlays).addTo(map); // GP OVERLAY CODE
       },
-
-      error: err => {
-        console.error(err);
-        alert('Failed to load markers.');
-      }
+      error: err => { console.error(err); alert('Failed to load markers.'); }
     });
   </script>
 </body>
