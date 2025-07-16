@@ -101,7 +101,14 @@
           .forEach(r => {
             const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
             const defaultPopup = `<b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`;
-            const detailedPopup = `<div style="width:300px;"><b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}<p>${r.description||''}</p><p>Best time: ${r.timeday||'unknown'}.</p></div>`;
+            const detailedPopup = `
+              <div style="width: 300px;">
+                    <b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}
+                    <p>${r.description || ''}</p>
+                    <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
+                    <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
+                  </div> 
+                `;
             marker.bindPopup(defaultPopup);
             marker.on('dblclick', () => marker.getPopup().setContent(detailedPopup).openOn(map));
             marker.on('popupclose', () => marker.getPopup().setContent(defaultPopup));
