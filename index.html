@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.control.layers.tree@1.1.1/L.Control.Layers.Tree.min.css"
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.control.layers.tree@1.1.1/L.Control.Layers.Tree.min.css" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="GP.css" />
   <style>
@@ -126,11 +126,11 @@
           {
             label: 'Urban Heat Island',
             children: [
-              {label: 'NDVI', layer: ndviOverlay}
+              {label: 'Vegetation Index', layer: ndviOverlay}
             ]
           },
           {
-            label: 'Cool Spot Markers',
+            label: 'Cool Spots',
             children: [
               {label: 'Morning', layer: morning},
               {label: 'Afternoon', layer: afternoon},
