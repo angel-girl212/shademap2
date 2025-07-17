@@ -138,7 +138,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         // BENTWAY ARTWORK preloads
 
         // casting a net, casting a spell
-        const spell_marker = L.marker([43.63760, -79.40564], { icon: goldIcon }).addTo(bentway);
+        const spell_marker = L.marker([43.63760, -79.40564], { icon: goldIcon }).addTo(artwork);
         const spell_defaultPopup = `<b>${'Sun/Shade: Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}`;
         const spell_detailedPopup = `
         <div style="width: 300px;">
@@ -149,7 +149,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         `;
 
         // bathed in a strange light
-        const strangelight_marker = L.marker(43.63962, -79.39562, { icon: goldIcon }).addTo(bentway);
+        const strangelight_marker = L.marker(43.63962, -79.39562, { icon: goldIcon }).addTo(artwork);
         const strangelight_defaultPopup = `<b>${'Sun/Shade: Bathed in a Strange Light'}</b><br>${'43.63962'}, ${'-79.39562'}`;
         const strangelight_detailedPopup = `
         <div style="width: 300px;">
@@ -161,7 +161,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         
 
         // declaration of the understory
-        const understory_marker = L.marker([43.63794, -79.39681], { icon: goldIcon }).addTo(bentway);
+        const understory_marker = L.marker([43.63794, -79.39681], { icon: goldIcon }).addTo(artwork);
         const understory_defaultPopup = `<b>${'Sun/Shade: Declaration of the Understory'}</b><br>${'43.63794'}, ${'-79.39681'}`;
         const understory_detailedPopup = `
         <div style="width: 300px;">
@@ -172,7 +172,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         `;
 
         // la sombra que te cobija
-        const sombra_marker = L.marker([43.63770, -79.40415], { icon: goldIcon }).addTo(bentway);
+        const sombra_marker = L.marker([43.63770, -79.40415], { icon: goldIcon }).addTo(artwork);
         const sombra_defaultPopup = `<b>${'Sun/Shade: la sombra que te cobija'}</b><br>${'43.63770'}, ${'-79.40415'}`; 
         const sombra_detailedPopup = `
         <div style="width: 300px;">
@@ -183,7 +183,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         `;
 
         // seeing celsius
-        const celsius_marker = L.marker([43.63774, -79.40479], { icon: goldIcon }).addTo(bentway);
+        const celsius_marker = L.marker([43.63774, -79.40479], { icon: goldIcon }).addTo(artwork);
         const celsius_defaultPopup = `<b>${'Sun/Shade: Seeing Celsius'}</b><br>${'43.63774'}, ${'-79.40479'}`;
         const celisus_detailedPopup = `
         <div style="width: 300px;">
@@ -194,7 +194,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         `;
 
         // second shade
-        const secondshade_marker = L.marker([43.63729, -79.40976], { icon: goldIcon }).addTo(bentway);
+        const secondshade_marker = L.marker([43.63729, -79.40976], { icon: goldIcon }).addTo(artwork);
         const secondshade_defaultPopup = `<b>${'Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}`;
         const secondshade_detailedPopup = `
         <div style="width: 300px;">
@@ -204,9 +204,15 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         </div> 
         `;
 
-        const markers = [bs_marker, bsg_marker, bst_marker, bsgr_marker];
-        const defaultPopups = [bs_defaultPopup, bsg_defaultPopup, bst_defaultPopup, bsgr_defaultPopup];
-        const detailedPopups = [bs_detailedPopup, bsg_detailedPopup, bst_detailedPopup, bsgr_detailedPopup];
+        const markers = [studio_marker, strachan_marker, skate_marker, staging_marker,
+          spell_marker, strangelight_marker, understory_marker, sombra_marker, celsius_marker, secondshade_marker
+        ];
+        const defaultPopups = [studio_defaultPopup, strachan_defaultPopup, skate_defaultPopup, staging_defaultPopup,
+          spell_defaultPopup, strangelight_defaultPopup, understory_defaultPopup, sombra_defaultPopup, celsius_defaultPopup, secondshade_defaultPopup
+        ];
+        const detailedPopups = [studio_detailedPopup, strachan_detailedPopup, skate_detailedPopup, staging_detailedPopup,
+          spell_detailedPopup, strangelight_detailedPopup, understory_detailedPopup, sombra_detailedPopup, celisus_detailedPopup, secondshade_detailedPopup
+        ];
 
 
         markers.forEach((marker, i) => {
@@ -254,11 +260,10 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
             label: 'At the Bentway',
             collapsed: true,
             children: [
-              {label: 'Site Components', layer: bentway}
+              {label: 'Site Components', layer: bentway},
               {label: 'Sun/Shade Artwork', layer: artwork}
             ]
-              
-            ]
+          }  
         ]
       }
     ];
