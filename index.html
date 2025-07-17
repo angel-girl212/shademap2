@@ -157,7 +157,7 @@
 
             const bsgr_marker = L.marker([43.63812, -79.39695], { icon: goldIcon }).addTo(bentway); // staging grounds
             const bsgr_defaultPopup = `<b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}`;
-            const bst_detailedPopup = `
+            const bsgr_detailedPopup = `
             <div style="width: 300px;">
                   <b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}
                   <p>${'Description'}</p>
@@ -226,7 +226,7 @@
               {label: 'Morning', layer: morning},
               {label: 'Afternoon', layer: afternoon},
               {label: 'Evening', layer: evening},
-              {label: 'Night', layer: night}
+              {label: 'Night', layer: night},
               {label: 'At the Bentway', layer: bentway}
             ]
           }
