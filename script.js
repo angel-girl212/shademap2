@@ -149,7 +149,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         `;
 
         // bathed in a strange light
-        const strangelight_marker = L.marker(43.63962, -79.39562, { icon: goldIcon }).addTo(artwork);
+        const strangelight_marker = L.marker([43.63962, -79.39562], { icon: goldIcon }).addTo(artwork);
         const strangelight_defaultPopup = `<b>${'Sun/Shade: Bathed in a Strange Light'}</b><br>${'43.63962'}, ${'-79.39562'}`;
         const strangelight_detailedPopup = `
         <div style="width: 300px;">
@@ -219,7 +219,15 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
             marker.on('dblclick', () => marker.getPopup().setContent(detailedPopups[i]).openOn(map));
             marker.on('popupclose', () => marker.getPopup().setContent(defaultPopups[i]));
 
-        });
+        }); 
+    
+    // Add marker groups to map
+    morning.addTo(map);
+    afternoon.addTo(map);
+    evening.addTo(map);
+    night.addTo(map);
+    bentway.addTo(map);
+    artwork.addTo(map);
 
     const baseTree = {
       label: 'Base Maps',
@@ -230,7 +238,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         ]
     };
 
-
+    
     const overlayTree = [
       {
         label: 'Heat Maps', 
