@@ -98,7 +98,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         <div style="width: 300px;">
               <b>${'Bentway Studio'}</b><br>${'43.63964'}, ${'-79.39536'}
               <p>${'Description'}</p>
-              <img src="${'photos/bentway_studio.jpg'}" width="100%" height="200" style="object-fit: cover;" />
+              <img src="${"photos/bentway_studio.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
 
@@ -109,7 +109,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         <div style="width: 300px;">
               <b>${'Bentway Strachan Gate'}</b><br>${'43.63722'}, ${'-79.40933'}
               <p>${'Description'}</p>
-              <img src="${'photos/strahan_gate.jpg'}" width="100%" height="200" style="object-fit: cover;" />
+              <img src="${"photos/strachan_gate.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
 
@@ -120,7 +120,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         <div style="width: 300px;">
               <b>${'Bentway Skate Trail'}</b><br>${'43.63794'}, ${'-79.40633'}
               <p>${'Description'}</p>
-              <img src="${'photos/skate_trail.jpg'}" width="100%" height="200" style="object-fit: cover; />
+              <img src="${"photos/skate_trail.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
 
@@ -131,7 +131,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         <div style="width: 300px;">
               <b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}
               <p>${'Description'}</p>
-              <img src="${'photos/staging_grounds.jpg'}" width="100%" height="200" style="object-fit: cover; />
+              <img src="${"photos/staging_grounds.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
 
@@ -185,7 +185,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         // seeing celsius
         const celsius_marker = L.marker([43.63774, -79.40479], { icon: goldIcon }).addTo(artwork);
         const celsius_defaultPopup = `<b>${'Sun/Shade: Seeing Celsius'}</b><br>${'43.63774'}, ${'-79.40479'}`;
-        const celisus_detailedPopup = `
+        const celsius_detailedPopup = `
         <div style="width: 300px;">
               <b>${'Sun/Shade: Seeing Celsius'}</b><br>${'43.63774'}, ${'-79.40479'}
               <p>${'Description'}</p>
@@ -211,12 +211,12 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
           spell_defaultPopup, strangelight_defaultPopup, understory_defaultPopup, sombra_defaultPopup, celsius_defaultPopup, secondshade_defaultPopup
         ];
         const detailedPopups = [studio_detailedPopup, strachan_detailedPopup, skate_detailedPopup, staging_detailedPopup,
-          spell_detailedPopup, strangelight_detailedPopup, understory_detailedPopup, sombra_detailedPopup, celisus_detailedPopup, secondshade_detailedPopup
+          spell_detailedPopup, strangelight_detailedPopup, understory_detailedPopup, sombra_detailedPopup, celsius_detailedPopup, secondshade_detailedPopup
         ];
 
 
         markers.forEach((marker, i) => {
-          marker.bindPopup(defaultPopups);
+          marker.bindPopup(defaultPopups[i]);
             marker.on('dblclick', () => marker.getPopup().setContent(detailedPopups[i]).openOn(map));
             marker.on('popupclose', () => marker.getPopup().setContent(defaultPopups[i]));
 
