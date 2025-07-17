@@ -87,6 +87,7 @@
         const afternoon = L.layerGroup();
         const evening = L.layerGroup();
         const night = L.layerGroup();
+        const bentway = L.layerGroup();
 
         // GP OVERLAY CODE: define Urban Heat Island Simulation overlay
         const ndviOverlay = L.imageOverlay(
@@ -109,6 +110,7 @@
                     <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
                   </div> 
                 `;
+            
             marker.bindPopup(defaultPopup);
             marker.on('dblclick', () => marker.getPopup().setContent(detailedPopup).openOn(map));
             marker.on('popupclose', () => marker.getPopup().setContent(defaultPopup));
@@ -121,19 +123,74 @@
             else marker.addTo(morning);
           });
         
-        // PRELOAD markers
+        // BENTWAY PRELOAD COOL SPOTS
 
-            const bs_marker = L.marker([43.63964, -79.39536], { icon: goldIcon }).addTo(evening); // bentway studio
+            const bs_marker = L.marker([43.63964, -79.39536], { icon: goldIcon }).addTo(bentway); // bentway studio
             const bs_defaultPopup = `<b>${'Bentway Studio'}</b><br>${43.63964}, ${-79.39536}`;
             const bs_detailedPopup = `
             <div style="width: 300px;">
                   <b>${'Bentway Studio'}</b><br>${'43.63964'}, ${'-79.39536'}
-                  <p>${'Air conditioned space during community events, occasional moving forest canopy'}</p>
-                  <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover; onerror="this.outerHTML='<p>Photo Load Error</p>'"" />
-                  <p>A user identified this as a shady spot on ${'7/14/2025 9:28:16'}.</p>
-                  <p>The best time to visit this spot is in the ${'Evening'}.</p>
+                  <p>${'Description'}</p>
+                  <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover;" />
             </div> 
             `;
+
+            const bsg_marker = L.marker([43.63722, -79.40933], { icon: goldIcon }).addTo(bentway); // strachan gate
+            const bsg_defaultPopup = `<b>${'Bentway Strachan Gate'}</b><br>${'43.63722'}, ${'-79.40933'}`; 
+            const bsg_detailedPopup = `
+            <div style="width: 300px;">
+                  <b>${'Bentway Strahan Gate'}</b><br>${'43.63722'}, ${'-79.40933'}
+                  <p>${'Description'}</p>
+                  <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover;" />
+            </div> 
+            `;
+
+            const bih_marker = L.marker([43.63786, -79.40603], { icon: goldIcon }).addTo(bentway); // ice house
+            const bih_defaultPopup = `<b>${'Bentway Ice House'}</b><br>${'43.63786'}, ${'-79.40603'}`;
+            const bih_detailedPopup = `
+            <div style="width: 300px;">
+                  <b>${'Bentway Ice House'}</b><br>${'43.63786'}, ${'-79.40603'}
+                  <p>${'Description'}</p>
+                  <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover; />
+            </div> 
+            `;
+
+            const bst_marker = L.marker([43.63791, -79.40522], { icon: goldIcon }).addTo(bentway); // skate trail
+            const bst_defaultPopup = `<b>${'Bentway Skate Trail'}</b><br>${'43.63791'}, ${'-79.40522'}`;
+            const bst_detailedPopup = `
+            <div style="width: 300px;">
+                  <b>${'Bentway Skate Trail'}</b><br>${'43.63791'}, ${'-79.40522'}
+                  <p>${'Description'}</p>
+                  <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover; />
+            </div> 
+            `;
+
+            const bsgr_marker = L.marker([43.63812, -79.39695], { icon: goldIcon }).addTo(bentway); // staging grounds
+            const bsgr_defaultPopup = `<b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}`;
+            const bst_detailedPopup = `
+            <div style="width: 300px;">
+                  <b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}
+                  <p>${'Description'}</p>
+                  <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover; />
+            </div> 
+            `;
+
+            const ss_marker = // second shade
+            // i frame link to bway site
+            
+            const sqtc_marker = // le sombra qui te cojiba
+
+            const cncs_marker = // casting a net casting a spell
+
+            const mf_marker = // moving forest
+
+            const sc_marker = // seeing celsius
+
+            const dou_marker = // declaration of the understory
+
+            const biasl_marker = // bathed in a strange light
+
+
 
             const markers = [bs_marker];
             const defaultPopups = [bs_defaultPopup];
@@ -152,6 +209,7 @@
         afternoon.addTo(map);
         evening.addTo(map);
         night.addTo(map);
+        bentway.addTo(map);
 
         const baseTree = {
           label: 'Base Maps',
@@ -179,6 +237,7 @@
               {label: 'Afternoon', layer: afternoon},
               {label: 'Evening', layer: evening},
               {label: 'Night', layer: night}
+              {label: 'At the Bentway', layer: bentway}
             ]
           }
         ];
