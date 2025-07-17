@@ -227,7 +227,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
     evening.addTo(map);
     night.addTo(map);
     bentway.addTo(map);
-    // artwork.addTo(map);
+    artwork.addTo(map);
 
     const baseTree = {
       label: 'Base Maps',
@@ -243,14 +243,12 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
       {
         label: 'Heat Maps', 
         collapsed: true,
-        noShow: true,
         children: [
           {label: 'Urban Heat Island', layer: ndviOverlay}
         ]
       },
       {
         label: 'Cool Spots',
-        collapsed: true,
         children: [
           {label: 'Morning', layer: morning},
           {label: 'Afternoon', layer: afternoon},
