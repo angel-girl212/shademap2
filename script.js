@@ -197,7 +197,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         const secondshade_defaultPopup = `<b>${'Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}`;
         const secondshade_detailedPopup = `
         <div style="width: 300px;">
-              <b>${'Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}
+              <b>${'Bentway Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}
               <p>${'Description'}</p>
               <iframe src="${"https://thebentway.ca/event/second-shade/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
@@ -249,7 +249,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
       },
       {
         label: 'Cool Spots',
-        collapsed = false,
+        collapsed: false,
         children: [
           {label: 'Morning', layer: morning},
           {label: 'Afternoon', layer: afternoon},
@@ -257,7 +257,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
           {label: 'Night', layer: night},
           {
             label: 'At the Bentway',
-            collapsed = false,
+            collapsed: false,
             children: [
               {label: 'Site Components', layer: bentway},
               {label: 'Sun/Shade Artwork', layer: artwork},
