@@ -139,7 +139,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         // casting a net, casting a spell
         const spell_marker = L.marker([43.63760, -79.40564], { icon: goldIcon }).addTo(artwork);
-        const spell_defaultPopup = `<b>${'Sun/Shade: Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}`;
+        const spell_defaultPopup = `<b>${'Sun/Shade:'}</b><b>${'Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}`;
         const spell_detailedPopup = `
         <div style="width: 300px;">
               <b>${'Sun/Shade: Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}
@@ -227,7 +227,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
     evening.addTo(map);
     night.addTo(map);
     bentway.addTo(map);
-    artwork.addTo(map);
+    // artwork.addTo(map);
 
     const baseTree = {
       label: 'Base Maps',
@@ -243,6 +243,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
       {
         label: 'Heat Maps', 
         collapsed: true,
+        noShow: true,
         children: [
           {label: 'Urban Heat Island', layer: ndviOverlay}
         ]
