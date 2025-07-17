@@ -77,21 +77,31 @@
     });
 
     // PRELOAD MARKERS
-    const bs_marker = L.marker([43.63964, -79.39536], { icon: goldIcon }).addTo(map);
-    const bs_defaultPopup = `<b>${'Bentway Studio'}</b><br>${43.63964}, ${-79.39536}`;
-    const bs_detailedPopup = `
-    <div style="width: 300px;">
-          <b>${'Bentway Studio'}</b><br>${'43.63964'}, ${'-79.39536'}
-          <p>${'Air conditioned space during community events, occasional moving forest canopy'}</p>
-          <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover;" />
-          <p>A user identified this as a shady spot on ${'7/14/2025 9:28:16'}.</p>
-          <p>The best time to visit this spot is in the ${'Evening'}.</p>
-    </div> 
-    `;
+    const def_markers = [
+      const markers = [
+          const bs_marker = L.marker([43.63964, -79.39536], { icon: goldIcon }).addTo(map); // bentway studio
+      ]
+      
+      const defaultPopoups = [
+          const bs_defaultPopup = `<b>${'Bentway Studio'}</b><br>${43.63964}, ${-79.39536}`;
+      ]
+        
+      const detailedPopups = [  
+          const bs_detailedPopup = `
+          <div style="width: 300px;">
+                <b>${'Bentway Studio'}</b><br>${'43.63964'}, ${'-79.39536'}
+                <p>${'Air conditioned space during community events, occasional moving forest canopy'}</p>
+                <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover;" />
+                <p>A user identified this as a shady spot on ${'7/14/2025 9:28:16'}.</p>
+                <p>The best time to visit this spot is in the ${'Evening'}.</p>
+          </div> 
+          `;
+      ]
+    ]
 
-    bs_marker.bindPopup(bs_defaultPopup);
-    bs_marker.on('dblclick', () => bs_marker.getPopup().setContent(bs_detailedPopup).openOn(map));
-    bs_marker.on('popupclose', () => bs_marker.getPopup().setContent(bs_defaultPopup));
+    def_markers.bindPopup(defaultPopups);
+    def_markers.on('dblclick', () => def_markers.getPopup().setContent(detailedPopups).openOn(map));
+    def_markers.on('popupclose', () => def_markers.getPopup().setContent(defaultPopups));
 
     // Load and parse marker CSV
     Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9kaeUmBnutaETaCQgasAR-S6udJ-zlt2KazlgM5lL-kt5g4vE8X9_Jl3yb5hk/pub?output=csv', {
