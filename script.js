@@ -149,7 +149,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
               <b>${'Bentway: Sun/Shade Installation'}</b><br>
               <b><i>${'Casting a Net, Casting a Spell'}</b></i><br>
               ${'43.63760'}, ${'-79.40564'}
-              <p>${'Description'}</p>
+              <p>${'Artist duo Celeste’s majestic, quilted canopy casts welcomed shade down to a seating area below, offering relief from the heat and a space for gathering. Like a suncatcher, Casting a Net, Casting a Spell embraces and harnesses the sun, weaving in archetypes that have surrounded the sun since ancient times.'}</p>
               <iframe src="${"https://thebentway.ca/event/casting-a-net-casting-a-spell/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
         `;
@@ -166,7 +166,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
               <b>${'Bentway: Sun/Shade Installation'}</b><br>
               <b><i>${'Bathed in a Strange Light'}</b></i><br>
               ${'43.63962'}, ${'-79.39562'}
-              <p>${'Description'}</p>
+              <p>${'Working in collaboration with the sun’s rhythms, Natalie Hunter’s photographs on the windows of The Bentway Studio (facing Canoe Landing Park) explore how ever-shifting sunlight shapes our experience of public spaces. As the sun moves throughout the day, translucent images cast down a colorful, slow-moving cinema.'}</p>
               <iframe src="${"https://thebentway.ca/event/bathed-in-strange-light/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
         `;
@@ -183,7 +183,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
               <b>${'Bentway: Sun/Shade Installation'}</b><br>
               <b><i>${'Declaration of the Understory'}</b></i><br>
               ${'43.63794'}, ${'-79.39681'}
-              <p>${'Description'}</p>
+              <p>${'Secwépemc artist Tania Willard approaches the space below the highway as a tree canopy, reminiscent of the “understory” floor of southern Ontario forests, where pockets of shade and sunlight shape unique ecosystems below. In a stunning mixed-media installation, floral motifs, iridescence, and powerful slogans offer a mediation on the power of shade as a lifeforce.'}</p>
               <iframe src="${"https://thebentway.ca/event/declaration-of-the-understory/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
         `;
@@ -200,7 +200,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
               <b>${'Bentway: Sun/Shade Installation'}</b><br>
               <b><i>${'la sombra que te cobija'}</b></i><br>
               ${'43.63770'}, ${'-79.40415'}
-              <p>${'Description'}</p>
+              <p>${'A geometric pavilion invites you to cross under the Gardiner, casting both a cooling effect and ornate shadow patterns. Edra Soto’s installation references the shade-making façades of working-class Puerto Rican bungalows to create an expansive, sun-filtering threshold, reflecting on the intersection of heat-responsive architecture, place-making, and cultural heritage.'}</p>
               <iframe src="${"https://thebentway.ca/event/the-shadow-that-shelters-you/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
         `;
@@ -217,7 +217,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
               <b>${'Bentway: Sun/Shade Installation'}</b><br>
               <b><i>${'Seeing Celsius'}</b></i><br>
               ${'43.63774'}, ${'-79.40479'}
-              <p>${'Description'}</p>
+              <p>${'What happens when we can see heat? By adding thermal-imaging technology to the familiar viewfinder found at scenic lookout points, LeuWebb Projects enables you to see the temperature differences across The Bentway space and the bodies that move through it. It’s a new perspective that will shift how you view urban spaces and the materials that shape them.'}</p>
               <iframe src="${"https://thebentway.ca/event/seeing-celsius/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
         `;
@@ -233,7 +233,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
               <b>${'Bentway: Sun/Shade Installation'}</b><br>
               <b><i>${'Second Shade'}</b></i><br>
               ${'43.63729'}, ${'-79.40976'}
-              <p>${'Description'}</p>
+              <p>${'Echoing both the towering structures of downtown skyscrapers and a forest of trees, Mary Mattingly’s Second Shade combines lush greenery and repurposed construction materials to make a unique 20ft tall urban canopy, showcasing the cooling potential of green roofs, soft landscaping, and responsive architecture.'}</p>
               <iframe src="${"https://thebentway.ca/event/second-shade/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
         `;
