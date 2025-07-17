@@ -249,6 +249,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
       },
       {
         label: 'Cool Spots',
+        collapsed = false,
         children: [
           {label: 'Morning', layer: morning},
           {label: 'Afternoon', layer: afternoon},
@@ -256,7 +257,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
           {label: 'Night', layer: night},
           {
             label: 'At the Bentway',
-            collapsed: true,
+            collapsed = false,
             children: [
               {label: 'Site Components', layer: bentway},
               {label: 'Sun/Shade Artwork', layer: artwork},
@@ -270,3 +271,5 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
   },
   error: err => { console.error(err); alert('Failed to load markers.'); }
 });
+
+// interactibility!!!
