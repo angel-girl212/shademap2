@@ -97,7 +97,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         const studio_detailedPopup = `
         <div style="width: 300px;">
               <b>${'Bentway Studio'}</b><br>${'43.63964'}, ${'-79.39536'}
-              <p>${'Description'}</p>
+              <p>${'Venue open during community events and workshops. Air conditioned, wheelchair accessible, and equipped with washrooms.'}</p>
               <img src="${"photos/bentway_studio.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
@@ -108,7 +108,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         const strachan_detailedPopup = `
         <div style="width: 300px;">
               <b>${'Bentway Strachan Gate'}</b><br>${'43.63722'}, ${'-79.40933'}
-              <p>${'Description'}</p>
+              <p>${'An ampitheatre shaded from the sun by the highway above, with space to breathe and play.'}</p>
               <img src="${"photos/strachan_gate.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
@@ -119,7 +119,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         const skate_detailedPopup = `
         <div style="width: 300px;">
               <b>${'Bentway Skate Trail'}</b><br>${'43.63794'}, ${'-79.40633'}
-              <p>${'Description'}</p>
+              <p>${'This public space beneath an expressway hosts art shows, community events & summer roller skating. Equipped with water features for drinking and splashing. Wheelchair accessible and washrooms available during open hours.'}</p>
               <img src="${"photos/skate_trail.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
@@ -130,7 +130,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         const staging_detailedPopup = `
         <div style="width: 300px;">
               <b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}
-              <p>${'Description'}</p>
+              <p>${'Experimental extension to the main Bentway site, the Staging Grounds are sheltered from the sun and rain and feature unique ecological elements.'}</p>
               <img src="${"photos/staging_grounds.jpg"}" width="100%" height="200" style="object-fit: cover;" />
         </div> 
         `;
@@ -290,16 +290,9 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
           {label: 'Afternoon', layer: afternoon},
           {label: 'Evening', layer: evening},
           {label: 'Night', layer: night},
-          {
-            label: 'At The Bentway',
-            collapsed: false,
-            children: [
-              {label: 'Our Site', layer: bentway},
-              {label: 'Sun/Shade Art', layer: artwork},
-            ]
-          },  
+          {label: 'Sun/Shade Art', layer: artwork},
         ]
-      }
+      },  
     ];
 
     L.control.layers.tree(baseTree, overlayTree).addTo(map);
