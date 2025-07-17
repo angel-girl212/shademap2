@@ -76,6 +76,24 @@
       iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
     });
 
+    // PRELOAD MARKERS
+
+    const bs_marker = L.marker([43.63964, -79.39536], { icon: goldIcon });
+    const bs_defaultPopup = `<b>${'Bentway Studio'}</b><br>${43.63964}, ${-79.39536)}`;
+    const bs_detailedPopup = `
+    <div style="width: 300px;">
+          <b>${'Bentway Studio'}</b><br>${'43.63964'}, ${'-79.39536'}
+          <p>${'Air conditioned space during community events, occasional moving forest canopy'}</p>
+          <p>A user identified this as a shady spot on ${'7/14/2025 9:28:16'}.</p>
+          <p>The best time to visit this spot is in the ${'Evening'}.</p>
+          <iframe src="${'photos/bway_studio.jpg'}" width="100%" height="200" frameborder="0"></iframe>
+    </div> 
+    `;
+
+    bs_marker.bindPopup(bs_defaultPopup);
+    bs_marker.on('dblclick', () => bs_marker.getPopup().setContent(bs_detailedPopup).openOn(map));
+    bs_marker.on('popupclose', () => bs_marker.getPopup().setContent(bs_defaultPopup));
+
     // Load and parse marker CSV
     Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9kaeUmBnutaETaCQgasAR-S6udJ-zlt2KazlgM5lL-kt5g4vE8X9_Jl3yb5hk/pub?output=csv', {
       download: true,
