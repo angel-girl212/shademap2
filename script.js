@@ -1,82 +1,269 @@
-// NOT USED JUST STORAGE
-
-
-var map = L.map('map').setView([43.637869, -79.406311], 13);
-
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// Base tile layers
+const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-}).addTo(map);
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+});
+const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19,
+  attribution: '© Esri'
+});
 
-var marker = L.marker([43.637869, -79.406311]).addTo(map);
-marker.bindPopup("<b>The Bentway</b><br>250 Fort York").openPopup();
+const map = L.map('map', {
+  center: [43.637869, -79.406311],
+  zoom: 13,
+  layers: [street, satellite] // default layers
+});
 
-var polygon = L.polygon([
-  [43.635376, -79.426003],
-  [43.638746, -79.410735],
-  [43.639352, -79.410982],
-  [43.639996, -79.410338],
-  [43.641138, -79.409781],
-  [43.643739, -79.410725],
-  [43.643933, -79.409759],
-  [43.642667, -79.408697],
-  [43.641666, -79.407302],
-  [43.641852, -79.406294],
-  [43.641518, -79.405382],
-  [43.641332, -79.404513],
-  [43.640641, -79.404234],
-  [43.641176, -79.401627],
-  [43.640695, -79.401439],
-  [43.642722, -79.393827],
-  [43.643917, -79.388613],
-  [43.645221, -79.382454],
-  [43.645912, -79.378967],
-  [43.645843, -79.376564],
-  [43.643739, -79.375619],
-  [43.641976, -79.374632],
-  [43.640105, -79.373237],
-  [43.637807, -79.379364],
-  [43.637504, -79.382819],
-  [43.63717,  -79.387025],
-  [43.636324, -79.391885],
-  [43.635275, -79.394417],
-  [43.632379, -79.39976],
-  [43.635648, -79.403107],
-  [43.635943, -79.404352],
-  [43.636192, -79.405543],
-  [43.636285, -79.406701],
-  [43.636262, -79.408107],
-  [43.635951, -79.409695],
-  [43.633124, -79.421958],
-  [43.632542, -79.422344],
-  [43.632923, -79.423289],
-  [43.632573, -79.424909],
-  [43.635376, -79.426003]
-  ]).addTo(map);
+// Boundary pane
+map.createPane('topPane');
+map.getPane('topPane').style.zIndex = 650;
 
-polygon.bindPopup("<b>Under Gardiner Public Realm Plan</b><br>study area");
+// Load GTA boundary
+fetch('toronto_bound.json')
+  .then(res => res.json())
+  .then(data => {
+    L.geoJSON(data, {
+      pane: 'topPane',
+      style: { color: '#ffd300', weight: 4, fillOpacity: 0, dashArray: '6,6' }
+    }).bindPopup('Toronto Regional Boundary').addTo(map);
+  })
+  .catch(err => console.error('Failed to load boundary:', err));
 
-var popup = L.popup();
+// Geocoder control
+L.Control.geocoder({ defaultMarkGeocode: false, position: 'topleft' })
+  .on('markgeocode', e => map.setView(e.geocode.center, 16))
+  .addTo(map);
 
-function onMapClick(e) {
-  popup
-    .setLatLng(e.latlng)
-    .setContent("You clicked the map at " + e.latlng.toString())
-    .openOn(map);
-}
+// Custom marker icon
+const goldIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+});
 
-map.on('click', onMapClick);
+// Load and parse marker CSV
+Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9kaeUmBnutaETaCQgasAR-S6udJ-zlt2KazlgM5lL-kt5g4vE8X9_Jl3yb5hk/pub?output=csv', {
+  download: true,
+  header: true,
+  dynamicTyping: true,
+  skipEmptyLines: true,
+  complete: results => {
+    const morning = L.layerGroup();
+    const afternoon = L.layerGroup();
+    const evening = L.layerGroup();
+    const night = L.layerGroup();
+    const bentway = L.layerGroup();
+    const artwork = L.layerGroup();
 
-function ask() {
-  var answer = window.confirm("Would you like to input this location as a shady spot?");
-    if (answer) {
-      // send to webapp
-    } else {
-      // close window
-    }
-}
+    // GP OVERLAY CODE: define Urban Heat Island Simulation overlay
+    const ndviOverlay = L.imageOverlay(
+      'toronto_ndvi_color_export_nd.png',
+      [[43.581, -79.639], [43.855, -79.116]],
+      { opacity: 0.65 }
+    );
 
-map.addEventListener("dblclick", () => {
-  ask();
+// Place markers into time-of-day groups
+    results.data
+      .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
+      .forEach(r => {
+        const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
+        const defaultPopup = `<b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`;
+        const detailedPopup = `
+          <div style="width: 300px;">
+                <b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}
+                <p>${r.description || ''}</p>
+                <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
+                <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
+              </div> 
+            `;
+        
+        marker.bindPopup(defaultPopup);
+        marker.on('dblclick', () => marker.getPopup().setContent(detailedPopup).openOn(map));
+        marker.on('popupclose', () => marker.getPopup().setContent(defaultPopup));
+
+        const time = (r.timeday||'').toLowerCase().trim();
+        if (time === 'morning') marker.addTo(morning);
+        else if (time === 'afternoon') marker.addTo(afternoon);
+        else if (time === 'evening') marker.addTo(evening);
+        else if (time === 'night') marker.addTo(night);
+        else marker.addTo(morning);
+      });
+    
+        // BENTWAY PRELOAD COOL SPOTS
+
+        // bentway studio
+        const studio_marker = L.marker([43.63964, -79.39536], { icon: goldIcon }).addTo(bentway); 
+        const studio_defaultPopup = `<b>${'Bentway Studio'}</b><br>${43.63964}, ${-79.39536}`;
+        const studio_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Bentway Studio'}</b><br>${'43.63964'}, ${'-79.39536'}
+              <p>${'Description'}</p>
+              <img src="${'photos/bentway_studio.jpg'}" width="100%" height="200" style="object-fit: cover;" />
+        </div> 
+        `;
+
+        // strachan gate
+        const strachan_marker = L.marker([43.63722, -79.40933], { icon: goldIcon }).addTo(bentway);
+        const strachan_defaultPopup = `<b>${'Bentway Strachan Gate'}</b><br>${'43.63722'}, ${'-79.40933'}`; 
+        const strachan_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Bentway Strachan Gate'}</b><br>${'43.63722'}, ${'-79.40933'}
+              <p>${'Description'}</p>
+              <img src="${'photos/strahan_gate.jpg'}" width="100%" height="200" style="object-fit: cover;" />
+        </div> 
+        `;
+
+        // skate trail
+        const skate_marker = L.marker([43.63794, -79.40633], { icon: goldIcon }).addTo(bentway); // skate trail
+        const skate_defaultPopup = `<b>${'Bentway Skate Trail'}</b><br>${'43.63794'}, ${'-79.40633'}`;
+        const skate_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Bentway Skate Trail'}</b><br>${'43.63794'}, ${'-79.40633'}
+              <p>${'Description'}</p>
+              <img src="${'photos/skate_trail.jpg'}" width="100%" height="200" style="object-fit: cover; />
+        </div> 
+        `;
+
+        // staging grounds
+        const staging_marker = L.marker([43.63812, -79.39695], { icon: goldIcon }).addTo(bentway);
+        const staging_defaultPopup = `<b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}`;
+        const staging_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Bentway Staging Grounds'}</b><br>${'43.63812'}, ${'-79.39695'}
+              <p>${'Description'}</p>
+              <img src="${'photos/staging_grounds.jpg'}" width="100%" height="200" style="object-fit: cover; />
+        </div> 
+        `;
+
+        // BENTWAY ARTWORK preloads
+
+        // casting a net, casting a spell
+        const spell_marker = L.marker([43.63760, -79.40564], { icon: goldIcon }).addTo(bentway);
+        const spell_defaultPopup = `<b>${'Sun/Shade: Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}`;
+        const spell_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Sun/Shade: Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}
+              <p>${'Description'}</p>
+              <iframe src="${"https://thebentway.ca/event/casting-a-net-casting-a-spell/"}" width="100%" height="200" frameborder="0"></iframe>
+        </div> 
+        `;
+
+        // bathed in a strange light
+        const strangelight_marker = L.marker(43.63962, -79.39562, { icon: goldIcon }).addTo(bentway);
+        const strangelight_defaultPopup = `<b>${'Sun/Shade: Bathed in a Strange Light'}</b><br>${'43.63962'}, ${'-79.39562'}`;
+        const strangelight_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Sun/Shade: Bathed in a Strange Light'}</b><br>${'43.63962'}, ${'-79.39562'}
+              <p>${'Description'}</p>
+              <iframe src="${"https://thebentway.ca/event/bathed-in-strange-light/"}" width="100%" height="200" frameborder="0"></iframe>
+        </div> 
+        `;
+        
+
+        // declaration of the understory
+        const understory_marker = L.marker([43.63794, -79.39681], { icon: goldIcon }).addTo(bentway);
+        const understory_defaultPopup = `<b>${'Sun/Shade: Declaration of the Understory'}</b><br>${'43.63794'}, ${'-79.39681'}`;
+        const understory_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Sun/Shade: Declaration of the Understory'}</b><br>${'43.63794'}, ${'-79.39681'}
+              <p>${'Description'}</p>
+              <iframe src="${"https://thebentway.ca/event/declaration-of-the-understory/"}" width="100%" height="200" frameborder="0"></iframe>
+        </div> 
+        `;
+
+        // la sombra que te cobija
+        const sombra_marker = L.marker([43.63770, -79.40415], { icon: goldIcon }).addTo(bentway);
+        const sombra_defaultPopup = `<b>${'Sun/Shade: la sombra que te cobija'}</b><br>${'43.63770'}, ${'-79.40415'}`; 
+        const sombra_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Sun/Shade: la sombra que te cobija'}</b><br>${'43.63770'}, ${'-79.40415'}
+              <p>${'Description'}</p>
+              <iframe src="${"https://thebentway.ca/event/the-shadow-that-shelters-you/"}" width="100%" height="200" frameborder="0"></iframe>
+        </div> 
+        `;
+
+        // seeing celsius
+        const celsius_marker = L.marker([43.63774, -79.40479], { icon: goldIcon }).addTo(bentway);
+        const celsius_defaultPopup = `<b>${'Sun/Shade: Seeing Celsius'}</b><br>${'43.63774'}, ${'-79.40479'}`;
+        const celisus_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Sun/Shade: Seeing Celsius'}</b><br>${'43.63774'}, ${'-79.40479'}
+              <p>${'Description'}</p>
+              <iframe src="${"https://thebentway.ca/event/seeing-celsius/"}" width="100%" height="200" frameborder="0"></iframe>
+        </div> 
+        `;
+
+        // second shade
+        const secondshade_marker = L.marker([43.63729, -79.40976], { icon: goldIcon }).addTo(bentway);
+        const secondshade_defaultPopup = `<b>${'Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}`;
+        const secondshade_detailedPopup = `
+        <div style="width: 300px;">
+              <b>${'Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}
+              <p>${'Description'}</p>
+              <iframe src="${"https://thebentway.ca/event/second-shade/"}" width="100%" height="200" frameborder="0"></iframe>
+        </div> 
+        `;
+
+        const markers = [bs_marker, bsg_marker, bst_marker, bsgr_marker];
+        const defaultPopups = [bs_defaultPopup, bsg_defaultPopup, bst_defaultPopup, bsgr_defaultPopup];
+        const detailedPopups = [bs_detailedPopup, bsg_detailedPopup, bst_detailedPopup, bsgr_detailedPopup];
+
+
+        markers.forEach((marker, i) => {
+          marker.bindPopup(defaultPopups);
+            marker.on('dblclick', () => marker.getPopup().setContent(detailedPopups[i]).openOn(map));
+            marker.on('popupclose', () => marker.getPopup().setContent(defaultPopups[i]));
+
+        });
+
+    // Add marker groups to map
+    morning.addTo(map);
+    afternoon.addTo(map);
+    evening.addTo(map);
+    night.addTo(map);
+    bentway.addTo(map);
+    artwork.addTo(map)
+
+    const baseTree = {
+      label: 'Base Maps',
+      collapsed: true,
+        children: [
+          {label: 'Street View', layer: street, name: 'OSM'},
+          {label: 'Satellite View', layer: satellite, name: 'ESRI'}  
+        ]
+    };
+
+
+    const overlayTree = [
+      {
+        label: 'Heat Maps', 
+        collapsed: true,
+        children: [
+          {label: 'Urban Heat Island', layer: ndviOverlay}
+        ]
+      },
+      {
+        label: 'Cool Spots',
+        collapsed: true,
+        children: [
+          {label: 'Morning', layer: morning},
+          {label: 'Afternoon', layer: afternoon},
+          {label: 'Evening', layer: evening},
+          {label: 'Night', layer: night},
+          {
+            label: 'At the Bentway',
+            collapsed: true,
+            children: [
+              {label: 'Site Components', layer: bentway}
+              {label: 'Sun/Shade Artwork', layer: artwork}
+            ]
+              
+            ]
+        ]
+      }
+    ];
+
+    L.control.layers.tree(baseTree, overlayTree).addTo(map);
+  },
+  error: err => { console.error(err); alert('Failed to load markers.'); }
 });
