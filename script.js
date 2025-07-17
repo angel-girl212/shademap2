@@ -139,10 +139,16 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         // casting a net, casting a spell
         const spell_marker = L.marker([43.63760, -79.40564], { icon: goldIcon }).addTo(artwork);
-        const spell_defaultPopup = `<b>${'Sun/Shade:'}</b><b>${'Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}`;
+        const spell_defaultPopup = `
+        <b>${'Bentway: Sun/Shade Installation'}</b><br>
+        <b><i>${'Casting a Net, Casting a Spell'}</b></i><br>
+        ${'43.63760'}, ${'-79.40564'}
+        `;
         const spell_detailedPopup = `
         <div style="width: 300px;">
-              <b>${'Sun/Shade: Casting a Net, Casting a Spell'}</b><br>${'43.63760'}, ${'-79.40564'}
+              <b>${'Bentway: Sun/Shade Installation'}</b><br>
+              <b><i>${'Casting a Net, Casting a Spell'}</b></i><br>
+              ${'43.63760'}, ${'-79.40564'}
               <p>${'Description'}</p>
               <iframe src="${"https://thebentway.ca/event/casting-a-net-casting-a-spell/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
@@ -150,10 +156,16 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         // bathed in a strange light
         const strangelight_marker = L.marker([43.63962, -79.39562], { icon: goldIcon }).addTo(artwork);
-        const strangelight_defaultPopup = `<b>${'Sun/Shade: Bathed in a Strange Light'}</b><br>${'43.63962'}, ${'-79.39562'}`;
+        const strangelight_defaultPopup = `
+        <b>${'Bentway: Sun/Shade Installation'}</b><br>
+        <b><i>${'Bathed in a Strange Light'}</b></i><br>
+        ${'43.63962'}, ${'-79.39562'}
+        `;
         const strangelight_detailedPopup = `
         <div style="width: 300px;">
-              <b>${'Sun/Shade: Bathed in a Strange Light'}</b><br>${'43.63962'}, ${'-79.39562'}
+              <b>${'Bentway: Sun/Shade Installation'}</b><br>
+              <b><i>${'Bathed in a Strange Light'}</b></i><br>
+              ${'43.63962'}, ${'-79.39562'}
               <p>${'Description'}</p>
               <iframe src="${"https://thebentway.ca/event/bathed-in-strange-light/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
@@ -161,10 +173,16 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         // declaration of the understory
         const understory_marker = L.marker([43.63794, -79.39681], { icon: goldIcon }).addTo(artwork);
-        const understory_defaultPopup = `<b>${'Sun/Shade: Declaration of the Understory'}</b><br>${'43.63794'}, ${'-79.39681'}`;
+        const understory_defaultPopup = `
+        <b>${'Bentway: Sun/Shade Installation'}</b><br>
+        <b><i>${'Declaration of the Understory'}</b></i><br>
+        ${'43.63794'}, ${'-79.39681'}
+        `;
         const understory_detailedPopup = `
         <div style="width: 300px;">
-              <b>${'Sun/Shade: Declaration of the Understory'}</b><br>${'43.63794'}, ${'-79.39681'}
+              <b>${'Bentway: Sun/Shade Installation'}</b><br>
+              <b><i>${'Declaration of the Understory'}</b></i><br>
+              ${'43.63794'}, ${'-79.39681'}
               <p>${'Description'}</p>
               <iframe src="${"https://thebentway.ca/event/declaration-of-the-understory/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
@@ -172,7 +190,11 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         // la sombra que te cobija
         const sombra_marker = L.marker([43.63770, -79.40415], { icon: goldIcon }).addTo(artwork);
-        const sombra_defaultPopup = `<b>${'Sun/Shade: la sombra que te cobija'}</b><br>${'43.63770'}, ${'-79.40415'}`; 
+        const sombra_defaultPopup = `
+        <b>${'Bentway: Sun/Shade Installation'}</b><br>
+        <b><i>${'la sombra que te cobija'}</b></i><br>
+        ${'43.63770'}, ${'-79.40415'}
+        `; 
         const sombra_detailedPopup = `
         <div style="width: 300px;">
               <b>${'Bentway: Sun/Shade Installation'}</b><br>
@@ -185,10 +207,16 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         // seeing celsius
         const celsius_marker = L.marker([43.63774, -79.40479], { icon: goldIcon }).addTo(artwork);
-        const celsius_defaultPopup = `<b>${'Sun/Shade: Seeing Celsius'}</b><br>${'43.63774'}, ${'-79.40479'}`;
+        const celsius_defaultPopup = `
+        <b>${'Bentway: Sun/Shade Installation'}</b><br>
+        <b><i>${'Seeing Celsius'}</b></i><br>
+        ${'43.63774'}, ${'-79.40479'}
+        `;
         const celsius_detailedPopup = `
         <div style="width: 300px;">
-              <b>${'Sun/Shade: Seeing Celsius'}</b><br>${'43.63774'}, ${'-79.40479'}
+              <b>${'Bentway: Sun/Shade Installation'}</b><br>
+              <b><i>${'Seeing Celsius'}</b></i><br>
+              ${'43.63774'}, ${'-79.40479'}
               <p>${'Description'}</p>
               <iframe src="${"https://thebentway.ca/event/seeing-celsius/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
@@ -196,10 +224,15 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         // second shade
         const secondshade_marker = L.marker([43.63729, -79.40976], { icon: goldIcon }).addTo(artwork);
-        const secondshade_defaultPopup = `<b>${'Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}`;
+        const secondshade_defaultPopup = `
+        <b>${'Bentway: Sun/Shade Installation'}</b><br>
+        <b><i>${'Second Shade'}</b></i><br>
+        ${'43.63729'}, ${'-79.40976'}`;
         const secondshade_detailedPopup = `
         <div style="width: 300px;">
-              <b>${'Bentway Sun/Shade: Second Shade'}</b><br>${'43.63729'}, ${'-79.40976'}
+              <b>${'Bentway: Sun/Shade Installation'}</b><br>
+              <b><i>${'Second Shade'}</b></i><br>
+              ${'43.63729'}, ${'-79.40976'}
               <p>${'Description'}</p>
               <iframe src="${"https://thebentway.ca/event/second-shade/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
