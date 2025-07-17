@@ -97,7 +97,7 @@
 
     markers.forEach((marker, i) => {
       marker.bindPopup(defaultPopups);
-        marker.on('dblclick', () => marker.getPopup().setContent(detailedPopups{i}).openOn(map));
+        marker.on('dblclick', () => marker.getPopup().setContent(detailedPopups[i]).openOn(map));
         marker.on('popupclose', () => marker.getPopup().setContent(defaultPopups[i]));
 
     });
