@@ -86,7 +86,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         else if (time === 'afternoon') marker.addTo(afternoon);
         else if (time === 'evening') marker.addTo(evening);
         else if (time === 'night') marker.addTo(night);
-        else marker.addTo(morning);
+        else marker.addTo(night);
       });
     
         // BENTWAY PRELOAD COOL SPOTS
@@ -158,7 +158,6 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
               <iframe src="${"https://thebentway.ca/event/bathed-in-strange-light/"}" width="100%" height="200" frameborder="0"></iframe>
         </div> 
         `;
-        
 
         // declaration of the understory
         const understory_marker = L.marker([43.63794, -79.39681], { icon: goldIcon }).addTo(artwork);
@@ -222,14 +221,6 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
 
         });
 
-    // Add marker groups to map
-    morning.addTo(map);
-    afternoon.addTo(map);
-    evening.addTo(map);
-    night.addTo(map);
-    bentway.addTo(map);
-    artwork.addTo(map)
-
     const baseTree = {
       label: 'Base Maps',
       collapsed: true,
@@ -261,9 +252,9 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
             collapsed: true,
             children: [
               {label: 'Site Components', layer: bentway},
-              {label: 'Sun/Shade Artwork', layer: artwork}
+              {label: 'Sun/Shade Artwork', layer: artwork},
             ]
-          }  
+          },  
         ]
       }
     ];
