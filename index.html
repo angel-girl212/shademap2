@@ -77,7 +77,6 @@
     });
 
     // PRELOAD MARKERS
-
     const bs_marker = L.marker([43.63964, -79.39536], { icon: goldIcon });
     const bs_defaultPopup = `<b>${'Bentway Studio'}</b><br>${43.63964}, ${-79.39536}`;
     const bs_detailedPopup = `
@@ -86,7 +85,7 @@
           <p>${'Air conditioned space during community events, occasional moving forest canopy'}</p>
           <p>A user identified this as a shady spot on ${'7/14/2025 9:28:16'}.</p>
           <p>The best time to visit this spot is in the ${'Evening'}.</p>
-          <iframe src="${'photos/bway_studio.jpg'}" width="100%" height="200" frameborder="0"></iframe>
+          <img src="${'photos/bway_studio.jpg'}" width="100%" height="200" style="object-fit: cover;" />
     </div> 
     `;
 
