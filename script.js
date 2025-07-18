@@ -62,28 +62,29 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
       { opacity: 0.65 }
     );
 
-// Place markers into time-of-day groups
+    // Place markers into time-of-day groups
     results.data
       .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
       .forEach(r => {
         const marker = L.marker([r.latitude, r.longitude], { icon: goldIcon });
         const defaultPopup = `<b>${r.name||'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}`;
+        
         const detailedPopup = `
-        <div class="popup-content" data-objectid="${r.objectID}" data-name="${r.name}">
-        <div style="width: 300px;">
-          <b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}
-          <p>${r.description || ''}</p>
-          <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
-          <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
-          <p>This spot has:<span id="upvote-count-${r.upvotes || 0}</span>upvotes. Click to add another!</p>
-              <img
-                src="photos/thumbsup.PNG"
-                style="cursor: pointer; width: 24px;"
-                onclick="submitUpvote(this)"
-                alt="Upvote"
-              />  
-          </p>
-        </div> 
+        <div class="popup-content" data-objectid="${r.objectID || 'unknown'}" data-name="${r.name}">
+          <div style="width: 300px;">
+            <b>${r.name || 'Unnamed'}</b><br>${r.latitude.toFixed(6)}, ${r.longitude.toFixed(5)}
+            <p>${r.description || ''}</p>
+            <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
+            <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
+            <p>This spot has: <span class="upvote-count">${r.upvotes || 0}</span> upvotes. Click to add another!</p>
+                <img
+                  src="photos/thumbsup.PNG"
+                  style="cursor: pointer; width: 24px;"
+                  onclick="submitUpvote(this)"
+                  alt="Upvote"
+                />  
+          </div> 
+        </div>
         `;
         
         marker.bindPopup(defaultPopup);
@@ -96,30 +97,15 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
         else if (time === 'evening') marker.addTo(evening);
         else if (time === 'night') marker.addTo(night);
         else marker.addTo(night);
-        
-        function submitUpvote(imgElement) {
-          const popupDiv = imgElement.closest("div");
-          
-          const span = popupDiv.querySelector(".upvote-count");
-          const current = parseInt(span.textContent) || 0;
-          span.textContent = current + 1; // optimistic
-
-          const objectID = popupDiv.dataset.objectid || 'unknown';
-          const name = popupDiv.dataset.name || 'unnamed';
-
-          const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScX-UiKwpe_MIlSi1wGz5HPwISmZ5AqmfkAWJcLDsxyT5sHOg/formResponse";
-          const formData = new FormData();
-          formData.append("entry.1719527082", objectID);
-          formData.append("entry.1293427374", name);
-          formData.append("entry.890823714", 1);
-          
-          fetch(formUrl, {
-            method: "POST",
-            mode: "no-cors",
-            body: formData
-          });
-        }
       });
+
+      // Add marker groups to map
+      morning.addTo(map);
+      afternoon.addTo(map);
+      evening.addTo(map);
+      night.addTo(map);
+      bentway.addTo(map);
+      artwork.addTo(map);
 
         // BENTWAY PRELOAD COOL SPOTS
 
@@ -287,14 +273,6 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
             marker.on('popupclose', () => marker.getPopup().setContent(defaultPopups[i]));
 
         }); 
-    
-    // Add marker groups to map
-    morning.addTo(map);
-    afternoon.addTo(map);
-    evening.addTo(map);
-    night.addTo(map);
-    bentway.addTo(map);
-    artwork.addTo(map);
 
     const baseTree = {
       label: 'Base Maps',
@@ -332,4 +310,25 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
   error: err => { console.error(err); alert('Failed to load markers.'); }
 });
 
-// interactibility!!!
+function submitUpvote(imgElement) {
+  const popupDiv = imgElement.closest(".popup-content");
+  
+  const span = popupDiv.querySelector(".upvote-count");
+  const current = parseInt(span.textContent) || 0;
+  span.textContent = current + 1; // optimistic
+
+  const objectID = popupDiv.dataset.objectid || 'unknown';
+  const name = popupDiv.dataset.name || 'unnamed';
+
+  const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScX-UiKwpe_MIlSi1wGz5HPwISmZ5AqmfkAWJcLDsxyT5sHOg/formResponse";
+  const formData = new FormData();
+  formData.append("entry.1719527082", objectID);
+  formData.append("entry.1293427374", name);
+  formData.append("entry.890823714", 1);
+  
+  fetch(formUrl, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  });
+}
