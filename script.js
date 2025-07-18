@@ -74,7 +74,17 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
                 <p>${r.description || ''}</p>
                 <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
                 <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
-                <p>Upvotes container: ${r.upvotes || '0'}. Add upvotes:.</p>
+                <p>Upvotes container: ${r.upvotes || '0'}.</p>
+                function submitUpvote(objectID, upvotes) {
+                  const objectID = r.objectID.value;
+                  const upvote = on button (thumbsup.png) click, send number 1 to entry}
+                  sendToForm(objectID, upvotes)
+                function sendToForm(objectID, upvotes) {
+                  const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScX-UiKwpe_MIlSi1wGz5HPwISmZ5AqmfkAWJcLDsxyT5sHOg/formResponse";
+                  const formData = new URLSearchParams();
+                  formData.append("entry.1719527082", userID);
+                  formData.append("entry.890823714", upvote);
+                <p>Add upvotes:.</p>
               </div> 
             `;
         
