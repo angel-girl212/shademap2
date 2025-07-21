@@ -284,7 +284,7 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
       },
       {
         label: 'Cool Spots',
-        collapsed: false,
+        collapsed: true,
         children: [
           {label: 'Morning', layer: morning},
           {label: 'Afternoon', layer: afternoon},
