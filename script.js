@@ -75,7 +75,6 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
             <p>${r.description || ''}</p>
             <p>A user identified this as a shady spot on ${r.timestamp || 'an unknown date'}.</p>
             <p>The best time to visit this spot is in the ${r.timeday || 'unknown'}.</p>
-            <p>This spot has: ${r.upvotes || 0} upvotes. </p>
         `;
         
         marker.bindPopup(defaultPopup);
