@@ -62,6 +62,8 @@ Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTrYopwENfaG6flpsO9k
       { opacity: 0.65 }
     );
 
+    ndviOverlay.addTo(map);
+
     // Place markers into time-of-day groups
     results.data
       .filter(r => Number.isFinite(r.latitude) && Number.isFinite(r.longitude))
